@@ -1,0 +1,68 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: testapp
+spec:
+  replicas: 10
+  selector:
+    matchLabels:
+      app: testapp
+  template:
+    metadata:
+      labels:
+        app: testapp
+    spec:
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - podAffinityTerm:
+              labelSelector:
+                matchLabels:
+                  app: testapp
+              topologyKey: kubernetes.io/hostname
+      priorityClassName: production-medium
+      terminationGracePeriodSeconds: 40
+      initContainers:
+      - name: wait-postgres
+        image: postgres:12.1-alpine
+        command:
+        - sh
+        - -ec
+        - |
+          until (pg_isready -h example.org -p 5432 -U postgres); do
+            sleep 1
+          done
+        resources:
+          requests:
+            cpu: 50m
+            memory: 50Mi
+          limits:
+            cpu: 50m
+            memory: 50Mi
+      containers:
+      - name: backend
+        image: my-app-image:1.11.1
+        command:
+        - run
+        - app
+        - --trigger-graceful-shutdown-if-memory-usage-is-higher-than
+        - 450Mi
+        - --timeout-seconds-for-graceful-shutdown
+        - 35s
+        startupProbe:
+          httpGet:
+            path: /simple-startup-check-no-external-dependencies
+            port: 80
+          timeoutSeconds: 7
+          failureThreshold: 12
+        lifecycle:
+          preStop:
+            exec:
+              ["sh", "-ec", "#command to shutdown gracefully if needed"]
+        resources:
+          requests:
+            cpu: 200m
+            memory: 500Mi
+          limits:
+            cpu: 200m
+            memory: 500Mi
