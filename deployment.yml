@@ -1,12 +1,17 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: testapp
+  name: testapp-deployment
 spec:
   replicas: 3
   selector:
     matchLabels:
       app: testapp
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+    type: RollingUpdate
   template:
     metadata:
       labels:
@@ -42,6 +47,8 @@ spec:
       containers:
       - name: backend
         image: safanasev/docs_app:0.1
+        ports:
+          - containerPort: 8301
 #        command:
 #        - run
 #        - app

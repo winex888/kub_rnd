@@ -2,8 +2,7 @@ FROM python:3.6-slim
 
 WORKDIR /app
 
-ENV PORT=8302 \
-    HOST=0.0.0.0 \
+ENV HOST=0.0.0.0 \
     PORT=8301 \
     DEBUG=false \
     NAME=S1 \
@@ -13,5 +12,5 @@ ENV PORT=8302 \
 COPY . /app/
 RUN pip install -r requirements.txt
 
-EXPOSE 8302
+EXPOSE 8301
 CMD [ "python", "app.py" ]
