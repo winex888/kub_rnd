@@ -30,7 +30,7 @@ minikube addons list
 ```
 
 Добавьте следующую строку в конец `/etc/hosts` файла.
-`172.17.0.15 hello-world.info`
+`172.17.0.15 localkube.info`
 
 
 
