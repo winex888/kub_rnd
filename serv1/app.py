@@ -102,7 +102,7 @@ gql_view = GraphQLView(
 
 
 async def info(_request):
-    return web.json_response({'data': 'info'})
+    return web.json_response({'data': 'info2'})
 
 
 def init_routes(app, cors):

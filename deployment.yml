@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: testapp-deployment
 spec:
-  replicas: 3
+  replicas: 4
   selector:
     matchLabels:
       app: testapp
@@ -46,7 +46,7 @@ spec:
 #            memory: 50Mi
       containers:
       - name: backend
-        image: safanasev/docs_app:0.1
+        image: safanasev/docs_app:0.1.1
         ports:
           - containerPort: 8301
 #        command:
@@ -56,12 +56,12 @@ spec:
 #        - 450Mi
 #        - --timeout-seconds-for-graceful-shutdown
 #        - 35s
-#        startupProbe:
-#          httpGet:
-#            path: /info
-#            port: 8302
-#          timeoutSeconds: 7
-#          failureThreshold: 12
+        startupProbe:
+          httpGet:
+            path: /info
+            port: 8301
+          timeoutSeconds: 7
+          failureThreshold: 12
 #        lifecycle:
 #          preStop:
 #            exec:
