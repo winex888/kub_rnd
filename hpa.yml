@@ -1,0 +1,61 @@
+apiVersion: autoscaling/v2beta2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: php-apache
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: testapp-deployment
+  minReplicas: 1
+  maxReplicas: 10
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+        averageUtilization: 10
+#  - type: Pods
+#    pods:
+#      metric:
+#        name: packets-per-second
+#      target:
+#        type: AverageValue
+#        averageValue: 1k
+#  - type: Object
+#    object:
+#      metric:
+#        name: requests-per-second
+#      describedObject:
+#        apiVersion: networking.k8s.io/v1
+#        kind: Ingress
+#        name: minimal-ingress
+#      target:
+#        type: Value
+#        value: 10k
+#status:
+#  observedGeneration: 1
+#  lastScaleTime: <some-time>
+#  currentReplicas: 1
+#  desiredReplicas: 1
+#  status:
+#    conditions:
+#      - lastTransitionTime: "2020-12-11T10:44:43Z"
+#  currentMetrics:
+#  - type: Resource
+#    resource:
+#      name: cpu
+#      current:
+#        averageUtilization: 0
+#        averageValue: 0
+#  - type: Object
+#    object:
+#      metric:
+#        name: requests-per-second
+#      describedObject:
+#        apiVersion: networking.k8s.io/v1
+#        kind: Ingress
+#        name: minimal-ingress
+#      current:
+#        value: 10k

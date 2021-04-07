@@ -33,4 +33,13 @@ minikube addons list
 `172.17.0.15 localkube.info`
 
 
+helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+helm repo update
+helm install my-prometheus  prometheus-community/prometheus
+helm install --name my-release prometheus-community/prometheus-adapter
+export POD_NAME=$(kubectl get pods --namespace default -l "app=prometheus,component=server" -o jsonpath="{.items[0].metadata.name}")
+kubectl --namespace default port-forward $POD_NAME 9090
+
+
+ kubectl run -i --tty load-generator --rm --image=busybox --restart=Never -- /bin/sh -c "while sleep 0.001; do wget -q -O- http://localkube.info/info; done"
 
