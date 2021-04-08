@@ -5,7 +5,7 @@ WORKDIR /app
 ENV HOST=0.0.0.0 \
     PORT=8301 \
     DEBUG=false \
-    NAME=S1 \
+    NAME=service1 \
     S_HOST=0.0.0.0 \
     S_PORT=8305 \
     S_ENDPOINT='graphql'

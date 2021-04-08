@@ -4,7 +4,7 @@ default:
   PORT: 8301
   NGINX_PORT: 8301
   DEBUG: false
-  NAME: SCHEMA_REGESTRY
+  NAME: service1
   S_HOST: 0.0.0.0
   S_PORT: 8305
   S_ENDPOINT: 'graphql'

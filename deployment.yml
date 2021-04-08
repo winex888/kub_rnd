@@ -2,6 +2,8 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: testapp-deployment
+  annotations:
+    prometheus.io/scrape: "true"
 spec:
   replicas: 2
   selector:
@@ -46,7 +48,7 @@ spec:
 #            memory: 50Mi
       containers:
       - name: backend
-        image: safanasev/docs_app:0.1.1
+        image: safanasev/docs_app:0.1.2
         ports:
           - containerPort: 8301
 #        command:

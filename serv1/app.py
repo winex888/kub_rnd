@@ -15,6 +15,7 @@ from gql import Client
 from gql.transport.requests import RequestsHTTPTransport
 
 from conf import settings
+from middleware import metrics_middleware, MetricsView
 
 HOST_TEMPLATE = '{protocol}://{host}:{port}/{endpoint}'
 
@@ -107,6 +108,7 @@ async def info(_request):
 
 def init_routes(app, cors):
     app.router.add_get('/info', info)
+    app.router.add_route('GET', '/metrics', MetricsView),
     resource = cors.add(app.router.add_resource('/graphql'), {
         '*': aiohttp_cors.ResourceOptions(
             expose_headers='*',
@@ -125,6 +127,7 @@ def init_app(loop=None) -> web.Application:
     app = web.Application(
         loop=loop,
     )
+    app.middlewares.append(metrics_middleware)
     cors = aiohttp_cors.setup(app)
     init_routes(app, cors)
     return app

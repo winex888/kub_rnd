@@ -32,14 +32,19 @@ minikube addons list
 Добавьте следующую строку в конец `/etc/hosts` файла.
 `172.17.0.15 localkube.info`
 
-
+`
 helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
 helm repo update
 helm install my-prometheus  prometheus-community/prometheus
 helm install --name my-release prometheus-community/prometheus-adapter
 export POD_NAME=$(kubectl get pods --namespace default -l "app=prometheus,component=server" -o jsonpath="{.items[0].metadata.name}")
 kubectl --namespace default port-forward $POD_NAME 9090
+`
 
+ `kubectl run -i --tty load-generator --rm --image=busybox --restart=Never -- /bin/sh -c "while sleep 0.001; do wget -q -O- http://localkube.info/info; done"`
 
- kubectl run -i --tty load-generator --rm --image=busybox --restart=Never -- /bin/sh -c "while sleep 0.001; do wget -q -O- http://localkube.info/info; done"
+Использовать клиент прометеуса https://github.com/prometheus/client_python
 
+собирать метрики `request_processing_seconds_count` и с помощью функции `rate` прометеуса,
+расчитывать rps
+`rate(http_requests_total{job="api-server"}[5m])`
